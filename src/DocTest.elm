@@ -48,12 +48,12 @@ newSpec test expected line = Spec test expected line "" False
 collectSpecs : String -> List Spec
 collectSpecs txt =
   let
-    re = regex "--\\s*>>>\\s*(.+)[\\r\\n]--\\s*([^\\n\\r]+)"
+    re = regex "\\s*-{0,2}\\s*>>>\\s*(.+)[\\r\\n]\\s*-{0,2}\\s*([^\\n\\r]+)"
     extract m = case m.submatches of
       (Just test)::(Just expect)::_ -> newSpec test expect (countLines m)
       otherwise -> newSpec "" "" (countLines m)
     countLines m = List.length <| String.lines <| String.left m.index txt
-  in find All re txt |> List.map extract 
+  in find All re txt |> List.map extract
 
 -- elm-repl requires tailing back slash for handling multi-line statements
 evaluationScript : String
